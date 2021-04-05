@@ -24,7 +24,7 @@ new Vue({
     components: {
         'movie-list': {
             template: `<div id="movie-list">
-                            <div v-for="movie in movies" class="movie">
+                            <div v-for="movie in filteredMovies" class="movie">
                                 {{movie.title}}
                             </div>
                         </div>`,
@@ -32,20 +32,35 @@ new Vue({
                 function() {
                     return {
                      movies: [
-                        { title: 'Pulp Fiction' },
-                        { title: 'Shawshank' },
-                        { title: 'Goodfellas' },
+                        { title: 'Pulp Fiction', genre: genres.CRIME },
+                        { title: 'Shawshank', genre: genres.DRAMA },
+                        { title: 'Goodfellas', genre: genres.DRAMA },
                     ]
                  }
                     
                 },
-            props: ['genre', 'time']
+            props: ['genre', 'time'],
+            methods: {
+                moviePassesGenreFilter(movie) {
+                    if (!this.genre.length) {
+                        return true;
+                    } else {
+                        return this.genre.find(genre => movie.genre === genre);
+                    }
+                }
+            },
+            computed: {
+                //https://vuejs.org/v2/guide/computed.html
+                filteredMovies() {
+                    return this.movies.filter(this.moviePassesGenreFilter);
+                }
+            }
             
         },
         'movie-filter': {
             data() {
                 return {
-                    //destructured assignment
+                    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
                     genres
                 }
             },

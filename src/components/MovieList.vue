@@ -4,6 +4,7 @@
       <movie-item
         v-for="movie in filteredMovies"
         v-bind:movie="movie.movie"
+        v-bind:sessions="movie.sessions"
       ></movie-item>
     </div>
     <div v-else-if="movies.length">No results found.</div>

@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import './style.scss';
-import MovieList from './components/MovieList.vue';
-import MovieFilter from './components/MovieFilter.vue';
+import Overview from './components/Overview.vue';
 import VueResource from 'vue-resource';
 Vue.use(VueResource);
 // Moment.js
@@ -23,8 +22,7 @@ new Vue({
         bus
     },
     components: {
-        MovieList,
-        MovieFilter
+        Overview
     },
     created() {
         this.$http.get('/api').then(response => {

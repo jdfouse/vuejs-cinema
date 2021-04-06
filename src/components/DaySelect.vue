@@ -8,6 +8,10 @@
       >
         {{ formatDay(day) }}
       </li>
+      <li class="day-selector">
+        <span class="dec" v-on:click="changeDay(-1)"></span>
+        <span class="inc" v-on:click="changeDay(1)"></span>
+      </li>
     </ul>
   </div>
 </template>
@@ -33,6 +37,12 @@ export default {
     },
     selectDay(day) {
       this.$bus.$emit('set-day', day);
+    },
+    changeDay(change) {
+      let newDay = this.$moment(this.selected.add(change, 'days'));
+      if (this.days.find((day) => newDay.isSame(day, 'day'))) {
+        this.selectDay(newDay);
+      }
     },
   },
 };

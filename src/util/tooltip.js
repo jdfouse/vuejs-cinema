@@ -14,7 +14,6 @@ export default {
     install(Vue) {
         Vue.directive('tooltip', {
             bind(el, bindings) {
-                console.log(bindings.value.seats);
                 let span = document.createElement('span');
                 let text = document.createTextNode(`Seats available: ${bindings.value.seats}`);
                 span.appendChild(text);

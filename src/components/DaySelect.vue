@@ -1,12 +1,19 @@
 <template>
   <div id="day-select">
     <ul class="days">
-      <li class="day" v-for="day in days">{{ formatDay(day) }}</li>
+      <li
+        v-bind:class="{ day: true, active: isActive(day) }"
+        v-for="day in days"
+        v-on:click="selectDay(day)"
+      >
+        {{ formatDay(day) }}
+      </li>
     </ul>
   </div>
 </template>
 <script>
 export default {
+  props: ['selected'],
   data() {
     return {
       //creates a moment for the current day and the next 6
@@ -20,6 +27,12 @@ export default {
       } else {
         return raw.format('ddd MM/DD');
       }
+    },
+    isActive(day) {
+      return day.isSame(this.selected, 'day');
+    },
+    selectDay(day) {
+      this.$bus.$emit('set-day', day);
     },
   },
 };

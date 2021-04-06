@@ -21,18 +21,28 @@
 </template>
 
 <script>
+import times from '../util/times';
+
 export default {
-  props: ['movie', 'sessions', 'day'],
+  props: ['movie', 'sessions', 'day', 'time'],
   methods: {
     formatSessionTime(raw) {
       return this.$moment(raw).format('h:mm A');
     },
     filteredSessions(sessions) {
-      return sessions.filter((session) => {
-        console.log(this.day);
-        console.log(this.$moment(session.time));
-        return this.$moment(session.time).isSame(this.day, 'day');
-      });
+      return sessions.filter(this.sessionPassesTimeFilter);
+    },
+    sessionPassesTimeFilter(session) {
+      // only if the day is the same - filter a given day; if not same day return false.
+      if (!this.day.isSame(this.$moment(session.time), 'day')) {
+        return false;
+      } else if (this.time.length === 0 || this.time.length === 2) {
+        return true;
+      } else if (this.time[0] === times.AFTER_6PM) {
+        return this.$moment(session.time).hour() >= 18;
+      } else {
+        return this.$moment(session.time).hour() < 18;
+      }
     },
   },
 };

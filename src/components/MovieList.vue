@@ -13,6 +13,7 @@
   </div>
 </template>
 <script>
+import times from '../util/times';
 import MovieItem from './MovieItem.vue';
 export default {
   components: { MovieItem },
@@ -32,11 +33,25 @@ export default {
         return matched;
       }
     },
+    sessionPassesTimeFilter(session) {
+      // only if the day is the same - filter a given day; if not same day return false.
+      if (!this.day.isSame(this.$moment(session.time), 'day')) {
+        return false;
+      } else if (this.time.length === 0 || this.time.length === 2) {
+        return true;
+      } else if (this.time[0] === times.AFTER_6PM) {
+        return this.$moment(session.time).hour() >= 18;
+      } else {
+        return this.$moment(session.time).hour() < 18;
+      }
+    },
   },
   computed: {
     //https://vuejs.org/v2/guide/computed.html
     filteredMovies() {
-      return this.movies.filter(this.moviePassesGenreFilter);
+      return this.movies
+        .filter(this.moviePassesGenreFilter)
+        .filter((movie) => movie.sessions.find(this.sessionPassesTimeFilter));
     },
   },
 };
